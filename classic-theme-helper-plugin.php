@@ -96,6 +96,10 @@ if ( is_readable( $jetpack_autoloader ) ) {
 add_filter(
 	'plugin_action_links_' . CLASSIC_THEME_HELPER_PLUGIN_FOLDER . '/classic-theme-helper-plugin.php',
 	function ( $actions ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return $actions;
+		}
+
 		$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=classic-theme-helper-plugin' ) ) . '">' . __( 'Settings', 'classic-theme-helper-plugin' ) . '</a>';
 		array_unshift( $actions, $settings_link );
 
