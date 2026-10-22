@@ -1,0 +1,24 @@
+name: Gandalf
+on:
+  push:
+    branches: [trunk]
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    if: github.event.created == false && github.event.deleted == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.after }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: Automattic/action-gandalf@5cbd5263f33bfae356f03bdfba5e5b820bd5d593
+        with:
+          token: ${{ secrets.GANDALF_GITHUB_ACTION_TOKEN }}
+          type: plugin
+          base-sha: ${{ github.event.before }}
+          product-path: .
